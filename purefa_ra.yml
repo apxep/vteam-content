@@ -1,0 +1,17 @@
+---
+- name:  enable or disable Remote Assist
+  gather_facts: no
+  become: no
+  hosts: localhost
+
+  tasks:
+    - name: Set FlashArray RemoteAssist
+      local_action:
+        module: purefa_ra
+        state: "{{ state |default('disable') }}"
+#        fa_url: "{{ fa_url }}"
+#        api_token: "{{ fa_token }}"
+      register: fa_ra
+
+    - name: output
+      debug: var=fa_ra

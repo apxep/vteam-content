@@ -1,0 +1,34 @@
+#export PUREFA_URL=<flasharray_url>
+#export PUREFA_API=<flasharray_api_token>
+#export PUREFB_URL=<flashblade_url>
+#export PUREFB_URL=<flashblade_api_token>
+#ansible-playbook -i "localhost," -e subset=config this_playbook.yml
+---
+- name: simple fact gather and output from Pure FlashArray module
+  gather_facts: no
+  become: no
+  hosts: localhost
+  collections: 
+    - purestorage.flasharray
+    - purestorage.flashblade
+
+  tasks:
+    - name: gather Pure FA facts
+      local_action:
+        module: purefa_info
+        gather_subset: "{{ subset |default('all') }}"
+#        fa_url: "{{ fa_url }}"
+#        api_token: "{{ fa_token }}"
+      register: fa_info
+
+    - name: output
+      debug: var=fa_info
+
+    - name: gather Pure FB facts
+      local_action:
+        module: purefb_info
+        gather_subset: "{{ subset |default('all') }}"
+      register: fb_info
+
+    - name: output
+      debug: var=fb_info

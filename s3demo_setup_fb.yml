@@ -1,0 +1,19 @@
+---
+- name: setup s3 FlashBlade components
+  hosts: localhost
+  become: False
+  gather_facts: no
+
+  roles:
+    - name: s3_demo_fb_build
+
+  tasks:
+    - debug: var=s3_user
+    - name: grab keys
+      set_stats:
+        data:
+          my_user_access_key: "{{ s3_user.s3user_info.fb_s3user.access_id }}"
+          my_user_secret_key: "{{ s3_user.s3user_info.fb_s3user.access_key }}"
+
+
+

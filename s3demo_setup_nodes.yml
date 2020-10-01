@@ -1,0 +1,8 @@
+---
+- name: setup S3 demo hosts for DFW Lab
+  hosts: all
+  become: true
+  gather_facts: yes
+
+  roles:
+    - name: s3_demo_host_build
