@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpapache-deployment
+  namespace: demo
+  labels:
+    app: phpapache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpapache
+  template:
+    metadata:
+      labels:
+        app: phpapache
+    spec:
+      containers:
+        - name: phpapache
+          image: geerlingguy/php-apache
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: phpapache
+  name: phpapache-deployment
+  namespace: demo
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: phpapache
+  type: ClusterIP
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: phpapache-ingress
+  namespace: demo
+spec:
+  rules:
+    - host: webdemo.kspray.dfwlab.purestorage.com
+      http:
+        paths:
+          - path: /
+            backend: 
+              serviceName: phpapache-deployment
+              servicePort: 80
+
