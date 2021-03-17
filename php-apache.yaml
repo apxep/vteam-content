@@ -47,7 +47,7 @@ metadata:
   namespace: demo
 spec:
   rules:
-    - host: webdemo.kspray.dfwlab.purestorage.com
+    - host: yourapp.apps.k8s.example.com
       http:
         paths:
           - path: /
