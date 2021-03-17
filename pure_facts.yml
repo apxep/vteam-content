@@ -1,7 +1,7 @@
 #export PUREFA_URL=<flasharray_url>
 #export PUREFA_API=<flasharray_api_token>
 #export PUREFB_URL=<flashblade_url>
-#export PUREFB_URL=<flashblade_api_token>
+#export PUREFB_API=<flashblade_api_token>
 #ansible-playbook -i "localhost," -e subset=config this_playbook.yml
 ---
 - name: simple fact gather and output from Pure FlashArray module
