@@ -1,0 +1,10 @@
+---
+# tasks file for add_fa_host
+- name: create the host
+  local_action:
+    module: purestorage.flasharray.purefa_host
+    name: "{{ ansible_facts.hostname }}"
+    state: "{{ my_state | default('present') }}"
+    iqn: "{{ iscsi_iqn }}"
+    protocol: iscsi
+  delegate_to: localhost

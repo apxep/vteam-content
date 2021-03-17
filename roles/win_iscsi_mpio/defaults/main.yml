@@ -1,0 +1,9 @@
+---
+# defaults file for win_iscsi_mpio
+features:
+  - Multipath-IO
+
+services:
+  - MSiSCSI
+
+reboot_allowed: false

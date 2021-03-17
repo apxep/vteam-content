@@ -1,0 +1,32 @@
+---
+# tasks file for win_iscsi_mpio
+- name: enable features
+  win_feature:
+    name: "{{ item }}"
+    include_management_tools: true
+    include_sub_features: true
+    state: present
+  with_items: "{{ features }}"
+  register: feature_out
+
+- name: enable services
+  win_service:
+    name: "{{ item }}"
+    start_mode: auto
+    state: started
+  with_items: "{{ services }}"
+  register: services_out
+- name: reboot if necessary and allowed
+  win_reboot:
+  when: ( reboot_allowed | bool ) and ( feature_out.results[0].reboot_required | bool )
+
+- name: get IQN
+  win_command: powershell.exe -
+  args:
+    stdin: '(Get-WmiObject -Namespace root\wmi -Class MSiSCSIInitiator_MethodClass).iSCSINodeName'
+  register: cmd_out
+
+- set_fact:
+    iscsi_iqn: "{{ cmd_out.stdout_lines[0] }}"
+
+- debug: var=iscsi_iqn

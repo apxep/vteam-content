@@ -1,0 +1,26 @@
+---
+- name: prepare Windows system
+  hosts: all
+  become: no
+  gather_facts: yes
+
+  vars:
+    ansible_connection: winrm
+    ansible_winrm_transport: credssp
+    ansible_winrm_server_cert_validation: ignore
+    ansible_port: 5986
+
+  roles:
+  - role: win_iscsi_mpio
+    vars:
+      somevar: someval
+
+- name: add host to FlashArray
+  hosts: all
+  become: no
+  gather_facts: no
+
+  roles:
+  - role: add_fa_host
+    vars:
+      thisvar: thatval
