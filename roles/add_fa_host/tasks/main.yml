@@ -8,3 +8,13 @@
     iqn: "{{ iscsi_iqn }}"
     protocol: iscsi
   delegate_to: localhost
+
+- name: add to hostgroup
+  throttle: 1 # to prevent race on create hg
+  local_action:
+    module: purestorage.flasharray.purefa_hg
+    hostgroup: "{{ hostgroup_name }}"
+    state: "{{ my_state | default('present') }}"
+    host:
+      - "{{ ansible_facts.hostname }}"
+  when: ( hostgroup_name is defined ) and ( add_hostgroup|bool )

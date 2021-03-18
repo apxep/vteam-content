@@ -16,10 +16,16 @@
     state: started
   with_items: "{{ services }}"
   register: services_out
+
 - name: reboot if necessary and allowed
   win_reboot:
   when: ( reboot_allowed | bool ) and ( feature_out.results[0].reboot_required | bool )
 
+- name: set MPIO Policy
+  win_command: powershell.exe -
+  args:
+    stdin: 'Set-MSDSMGlobalDefaultLoadBalancePolicy -Policy {{ BP_MPIO_policy }}'
+    
 - name: get IQN
   win_command: powershell.exe -
   args:

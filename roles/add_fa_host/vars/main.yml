@@ -1,2 +1,4 @@
 ---
 # vars file for add_fa_host
+# hostgroup_name: UNDEFINED
+add_hostgroup: false

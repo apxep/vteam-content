@@ -6,4 +6,6 @@ features:
 services:
   - MSiSCSI
 
+BP_MPIO_policy: RR
+
 reboot_allowed: false
