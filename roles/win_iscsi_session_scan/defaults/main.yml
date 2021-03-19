@@ -1,0 +1,4 @@
+---
+# defaults file for win_iscsi_session_scan
+fa_iscsi_interfaces: []
+hostinit_iscsi_interfaces: []

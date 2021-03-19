@@ -1,13 +1,16 @@
 ---
 # tasks file for add_fa_host
+- name: set FA host name
+  set_fact:
+    fa_hostname: "{{ ansible_facts.hostname | regex_replace('\\.','-') }}"
+
 - name: create the host
   local_action:
     module: purestorage.flasharray.purefa_host
-    name: "{{ ansible_facts.hostname }}"
+    name: "{{ fa_hostname }}"
     state: "{{ my_state | default('present') }}"
     iqn: "{{ iscsi_iqn }}"
     protocol: iscsi
-  delegate_to: localhost
 
 - name: add to hostgroup
   throttle: 1 # to prevent race on create hg

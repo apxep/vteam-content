@@ -1,0 +1,19 @@
+---
+# tasks file for add_fa_volume_host
+- name: set FA volume name
+  set_fact:
+    fa_volname: "vol-{{ fa_hostname }}"
+
+- name: create the volume
+  local_action:
+    module: purestorage.flasharray.purefa_volume
+    name: "{{ fa_volname }}"
+    state: "{{ my_state | default('present') }}"
+    size: "{{ size }}G"
+
+- name: connect host to volume
+  local_action:
+    module: purestorage.flasharray.purefa_host
+    name: "{{ fa_hostname }}"
+    volume: "{{ fa_volname }}"
+    state: "{{ my_state | default('present') }}"

@@ -1,0 +1,20 @@
+---
+# tasks file for win_iscsi_session_scan
+#- name: ansible_ip_addresses to string
+#  set_fact:
+#    hostinit_iscsi_interfaces: "{{ ansible_ip_addresses | join(',') }}"
+
+- name: create PS directory
+  win_file:
+    path: "{{ script_temp_dir }}"
+    state: directory
+
+- name: push powershell script
+  win_copy:
+    src: "{{ script_filename }}"
+    dest: "{{ script_temp_dir }}\\{{ script_filename }}"
+
+- name: run the PS Script
+  win_command: powershell.exe -ExecutionPolicy ByPass -
+  args:
+    stdin: "{{ script_temp_dir}}\\{{ script_filename }} -initiator_ips \"{{ ansible_ip_addresses | join(',') }}\" -target_ips \"{{ hostvars['localhost'].fa_iscsi_interfaces | join(',') }}\" "

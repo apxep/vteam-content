@@ -1,5 +1,5 @@
 ---
-- name: prepare Windows system
+- name: prepare Windows system to connect to FlashArray iSCSI
   hosts: all
   become: no
   gather_facts: yes
@@ -24,3 +24,51 @@
   - role: add_fa_host
     vars:
       thisvar: thatval
+
+- name: create volume and mask to host
+  hosts: all
+  become: no
+  gather_facts: no
+
+  roles:
+  - role: add_fa_volume_host
+    vars:
+      somevar: someval
+
+- name: get FA info
+  hosts: localhost
+  become: no
+  gather_facts: no
+  vars:
+    fa_iscsi_interfaces: []
+
+  tasks:
+    - name: get FA info
+      purefa_info:
+        gather_subset:
+          - network
+      register: my_purefa_info
+
+    - name: build iSCSI list for host connection
+      set_fact:
+        fa_iscsi_interfaces: "{{ fa_iscsi_interfaces + [ item.value['address'] ] }}"
+      when: ( 'iscsi' in item.value['services'] ) and ( item.value['address'] is not none )
+      with_dict: "{{ my_purefa_info.purefa_info['network'] }}"
+
+    - debug: var=fa_iscsi_interfaces
+
+- name: connect and scan for LUN from Windows
+  hosts: all
+  become: no
+  gather_facts: yes
+
+  vars:
+    ansible_connection: winrm
+    ansible_winrm_transport: credssp
+    ansible_winrm_server_cert_validation: ignore
+    ansible_port: 5986
+
+  roles:
+  - role: win_iscsi_session_scan
+    vars:
+      this: that

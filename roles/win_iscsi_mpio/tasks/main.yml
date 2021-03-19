@@ -21,11 +21,21 @@
   win_reboot:
   when: ( reboot_allowed | bool ) and ( feature_out.results[0].reboot_required | bool )
 
-- name: set MPIO Policy
+- name: set MPIO LB Policy
   win_command: powershell.exe -
   args:
     stdin: 'Set-MSDSMGlobalDefaultLoadBalancePolicy -Policy {{ BP_MPIO_policy }}'
-    
+
+- name: set MPIO Timers - see Pure Microsoft BP documentation
+  win_command: powershell.exe -
+  args:
+    stdin: 'Set-MPIOSetting -NewPathRecoveryInterval 20 -CustomPathRecovery Enabled -NewPDORemovePeriod 30 -NewDiskTimeout 60 -NewPathVerificationState Enabled'
+
+- name: add FlashArray as an MPIO Device
+  win_command: powershell.exe -
+  args:
+    stdin: 'New-MSDSMSupportedHW -VendorId "PURE    " -ProductID "FlashArray      "'
+
 - name: get IQN
   win_command: powershell.exe -
   args:

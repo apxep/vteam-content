@@ -1,0 +1,4 @@
+---
+# vars file for win_iscsi_session_scan
+script_temp_dir: "C:\\PSTemp"
+script_filename: "create_iscsi_session.ps1"
