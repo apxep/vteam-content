@@ -1,0 +1,14 @@
+---
+- name: run the sim_sequencer utility
+  hosts: all
+  become: no
+  gather_facts: yes
+#  serial: 1
+
+  tasks:
+    - name:  launch the data generator utility
+      win_command: "powershell"
+      args:
+        chdir: C:\scripts\
+        stdin: '.\multithread_create.ps1 -count 1000 -basepath "\\dfwlab-data-1\jhdemoseq-ingest\$(Get-Date -Format FileDateTime)\" '
+      register: scriptout

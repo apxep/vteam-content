@@ -1,0 +1,9 @@
+---
+# vars file for sim_sequencer
+exedir: 'C:\Windows\'
+exefile: acgt.exe
+scriptdir: 'C:\scripts\'
+scriptfiles:
+  - create_loop.ps1
+  - multithread_create.ps1
+VC_redist_file: VC_redist.x64.exe

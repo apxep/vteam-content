@@ -1,0 +1,8 @@
+---
+- name: apply sim_sequencer role
+  hosts: all
+  become: no
+  gather_facts: yes
+
+  roles:
+    - role:  sim_sequencer

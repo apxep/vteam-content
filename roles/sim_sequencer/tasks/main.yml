@@ -1,0 +1,25 @@
+---
+# tasks file for sim_sequencer
+- name: create directory for scripts
+  win_file:
+    path: "{{ scriptdir }}"
+    state: directory
+
+- name: move scripts into directory
+  win_copy:
+    src: "{{ item }}"
+    dest: "{{ scriptdir }}{{ item }}"
+  with_items: "{{ scriptfiles }}"
+
+- name: move VC redist into directory
+  win_copy:
+    src: "{{ VC_redist_file }}"
+    dest: "{{ scriptdir }}{{ VC_redist_file }}"
+
+- name: install the Visual Studio Redist
+  win_command: "{{ scriptdir }}{{ VC_redist_file }} /install /quiet /norestart"
+
+- name: move the exe into place
+  win_copy:
+    src: "{{ exefile }}"
+    dest: "{{ exedir }}{{ exefile }}"
